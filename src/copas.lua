@@ -334,7 +334,8 @@ function copas.connect(skt, host, port)
     -- non-blocking connect on Windows results in error "Operation already
     -- in progress" to indicate that it is completing the request async. So essentially
     -- it is the same as "timeout"
-    if ret or (err ~= "timeout" and err ~= "Operation already in progress") then
+	-- About "Invalid argument": https://github.com/diegonehab/luasocket/pull/190
+    if ret or (err ~= "timeout" and err ~= "Operation already in progress" and err ~= "Invalid argument") then
       -- Once the async connect completes, Windows returns the error "already connected"
       -- to indicate it is done, so that error should be ignored. Except when it is the 
       -- first call to connect, then it was already connected to something else and the 
