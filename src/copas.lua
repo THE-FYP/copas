@@ -257,11 +257,11 @@ end
 
 -- same as above but with special treatment when reading chunks,
 -- unblocks on any data received.
-function copas.receivePartial(client, pattern, part, timeout)
+function copas.receivePartial(client, pattern, part)
   local s, err
   pattern = pattern or "*l"
   local current_log = _reading_log
-  local timer = newtimer(timeout)
+  local timer = newtimer()
   repeat
     s, err, part = client:receive(pattern, part)
     if s or ((type(pattern)=="number") and part~="" and part ~=nil ) or (not _isTimeout[err]) or timer:expired() then
@@ -421,7 +421,7 @@ local _skt_mt_tcp = {
 
                    receive = function (self, pattern, prefix)
                                if (self.timeout==0) then
-                                 return copas.receivePartial(self.socket, pattern, prefix, self.timeout)
+                                 return copas.receivePartial(self.socket, pattern, prefix)
                                end
                                return copas.receive(self.socket, pattern, prefix, self.timeout)
                              end,
